@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Movie Recommender</title>
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='style.css') }}">
+        <link rel="icon" type="image/png"
+            href="{{ url_for('static', filename='favicon.png') }}">
+
+    </head>
+    <body>
+        <header class="topbar glass" role="banner">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div id="lottie-cinema" class="lottie-player"
+                    aria-hidden="true"></div>
+                <div class="brand">
+                    <span class="title">AthuFlix</span>
+                </div>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="search-wrap">
+                    <input id="search-input"
+                        placeholder="Search movies (type to autocomplete)..."
+                        autocomplete="off" />
+                    <div id="autocomplete-list" class="autocomplete-list"
+                        aria-hidden="true"></div>
+                </div>
+
+                <button id="theme-toggle" class="theme-toggle"
+                    title="Toggle theme" aria-pressed="false"
+                    aria-label="Toggle dark and light theme">
+                    <span class="toggle-inner" aria-hidden="true">
+                        <!-- Sun (rays rotate when visible) -->
+                        <svg class="icon sun" width="28" height="28"
+                            viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true">
+                            <circle class="sun-core" cx="12" cy="12" r="4"
+                                fill="currentColor" />
+                            <g class="sun-rays" stroke="currentColor"
+                                stroke-width="1.2" stroke-linecap="round">
+                                <line x1="12" y1="1.5" x2="12" y2="4.5" />
+                                <line x1="12" y1="19.5" x2="12" y2="22.5" />
+                                <line x1="1.5" y1="12" x2="4.5" y2="12" />
+                                <line x1="19.5" y1="12" x2="22.5" y2="12" />
+                                <line x1="4.2" y1="4.2" x2="6.2" y2="6.2" />
+                                <line x1="17.8" y1="17.8" x2="19.8" y2="19.8" />
+                                <line x1="4.2" y1="19.8" x2="6.2" y2="17.8" />
+                                <line x1="17.8" y1="6.2" x2="19.8" y2="4.2" />
+                            </g>
+                        </svg>
+
+                        <!-- Moon (crescent — slides/fades when visible) -->
+                        <svg class="icon moon" width="28" height="28"
+                            viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            aria-hidden="true">
+                            <!-- big circle -->
+                            <path class="moon-shape"
+                                d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                                fill="currentColor" />
+                        </svg>
+                    </span>
+                </button>
+
+            </div>
+        </header>
+
+        <main class="page" role="main">
+            <section class="hero glass" aria-labelledby="hero-title">
+                <h1 id="hero-title">Movie Recommender</h1>
+                <p class="subtitle muted">Let the algorithm pick your next watch.</p>
+
+                <div class="controls" role="region"
+                    aria-label="Recommendation controls">
+                    <div class="select-wrap">
+                        <select id="movie-select" name="movie_name"
+                            aria-label="Choose movie">
+                            {% for movie in movies %}
+                            <option value="{{ movie }}">{{ movie }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button id="recommend-btn" class="btn primary"
+                        type="button">Recommend</button>
+                </div>
+
+                <div id="spinner" class="spinner hidden" aria-hidden="true"
+                    aria-live="polite">
+                    <div class="lds-dual-ring" role="status"
+                        aria-label="Loading"></div>
+                </div>
+            </section>
+
+            <section id="results" class="results-grid" aria-live="polite"
+                aria-atomic="true">
+                <!-- Recommendation cards will be injected here by script.js -->
+            </section>
+        </main>
+
+        <!-- Movie details modal -->
+        <div id="movie-modal" class="modal" aria-hidden="true" role="dialog"
+            aria-modal="true">
+            <div class="modal-content">
+                <button id="modal-close" class="modal-close"
+                    aria-label="Close details">&times;</button>
+
+                <div class="modal-left">
+                    <img id="modal-poster"
+                        src="{{ url_for('static', filename='no_poster.png') }}"
+                        alt="Poster">
+                </div>
+
+                <div class="modal-right">
+                    <h2 id="modal-title">Title</h2>
+                    <p><strong>Main star:</strong> <span
+                            id="modal-star">—</span></p>
+                    <p><strong>Language:</strong> <span
+                            id="modal-language">—</span></p>
+                    <p><strong>Release date:</strong> <span
+                            id="modal-release">—</span></p>
+                    <p><strong>Runtime:</strong> <span
+                            id="modal-runtime">—</span> mins</p>
+                    <p><strong>Genres:</strong> <span
+                            id="modal-genres">—</span></p>
+
+                    <h3>Overview</h3>
+                    <p id="modal-overview">Overview will appear here.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- scripts -->
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recommendations — {{ movie }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <header class="topbar glass" role="banner">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div id="lottie-cinema" class="lottie-player" aria-hidden="true"></div>
+        <div class="brand">
+          <span class="logo" aria-hidden="true"></span>
+          <span class="title">MovieBox</span>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="search-wrap">
+          <input id="search-input"
+            placeholder="Search movies (type to autocomplete)..."
+            autocomplete="off" />
+          <div id="autocomplete-list" class="autocomplete-list"
+            aria-hidden="true"></div>
+        </div>
+
+        <div class="theme-toggle" id="theme-toggle" title="Toggle theme"
+          aria-pressed="false">
+          <span class="icon-sun">☀️</span>
+          <span class="icon-moon">🌙</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="page" role="main">
+      <section class="hero glass" aria-labelledby="hero-title">
+        <h1 id="hero-title">Recommended for "{{ movie }}"</h1>
+        <p class="subtitle muted">Click any poster to see details</p>
+      </section>
+
+      <section id="results" class="results-grid" aria-live="polite"
+        aria-atomic="true">
+        {% if names and posters and movie_ids %}
+        {% for i in range(names|length) %}
+        <div class="card glass">
+          <div class="ribbon">Rec</div>
+          <img src="{{ posters[i] }}" data-movie-id="{{ movie_ids[i] }}"
+            alt="{{ names[i] }}" class="poster-img">
+          <p>{{ names[i] }}</p>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="muted" style="text-align:center;width:100%;">No
+          recommendations available.</p>
+        {% endif %}
+      </section>
+
+      <div style="text-align:center;margin:28px;">
+        <a href="{{ url_for('index') }}" class="back-btn btn">Back</a>
+      </div>
+    </main>
+
+    <!-- Movie details modal (same markup used by script.js) -->
+    <div id="movie-modal" class="modal" aria-hidden="true" role="dialog"
+      aria-modal="true">
+      <div class="modal-content">
+        <button id="modal-close" class="modal-close"
+          aria-label="Close details">&times;</button>
+
+        <div class="modal-left">
+          <img id="modal-poster"
+            src="{{ url_for('static', filename='no_poster.png') }}"
+            alt="Poster">
+        </div>
+
+        <div class="modal-right">
+          <h2 id="modal-title">Title</h2>
+          <p><strong>Main star:</strong> <span id="modal-star">—</span></p>
+          <p><strong>Language:</strong> <span id="modal-language">—</span></p>
+          <p><strong>Release date:</strong> <span
+              id="modal-release">—</span></p>
+          <p><strong>Runtime:</strong> <span id="modal-runtime">—</span>
+            mins</p>
+          <p><strong>Genres:</strong> <span id="modal-genres">—</span></p>
+
+          <h3>Overview</h3>
+          <p id="modal-overview">Overview will appear here.</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>
