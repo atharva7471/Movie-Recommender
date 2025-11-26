@@ -35,7 +35,6 @@ _session.mount("http://", _adapter)
 def load_movies_and_similarity():
     # ensure we run from project root
     os.chdir(PROJECT_ROOT)
-
     # movie_dict.pkl must exist
     movies_pkl = PROJECT_ROOT / "movie_dict.pkl"
     if not movies_pkl.exists():
